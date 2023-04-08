@@ -36,12 +36,12 @@ app.use(express.urlencoded({ extended: false }))
 // app.use(express.json())
 
 // 使用 .unless({ path: [/^\/api\//] }) 指定哪些接口不需要进行 Token 的身份认证
-// app.use(expressJWT({ secret: config.jwtSecretKey }).unless({ path: [/^\/api\/auth\//] }))
+app.use(expressJWT({ secret: config.jwtSecretKey }).unless({ path: [/^\/api\/auth\//] }))
 // 错误中间件
-/* app.use(function (err, req, res, next) {
+app.use(function (err, req, res, next) {
   if (err.name === 'UnauthorizedError') return res.esend('身份认证失败！')
   next()
-}) */
+}) 
 
 app.use('/api', userRouter)
 
