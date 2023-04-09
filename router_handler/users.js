@@ -4,20 +4,21 @@ const jwt = require('jsonwebtoken')
 const config = require('../config')
 exports.regUser = (req, res) => {
   // 接收表单数据
-  const userinfo = req.body
+  
+  const {username:name,password,usertype:type} = req.body
+  console.log(req.body);
   // 判断数据是否合法
-  if (!userinfo.name || !userinfo.password || !userinfo.type) {
+  if (!name || !password || !type) {
     return res.esend('用户名或密码不能为空！')
   }
-
   const userMap = {
     admin:"admin",
     coach:"coach",
     student:"student"
   }
-  const userTable = userMap[userinfo.type]
-  const sql = `select * from ${userTable} where name=?`
-  db.query(sql, [userinfo.name], function (err, results) {
+  const userSqlTable = userMap[type]
+  const sql = `select * from ${userSqlTable} where name=?`
+  db.query(sql, [name], function (err, results) {
     if (err) {
       return res.esend(err)
     }
@@ -25,10 +26,10 @@ exports.regUser = (req, res) => {
     if (results.length > 0) {
       return res.esend('用户名被占用，请更换其他用户名！')
     }
-    userinfo.password = bcrypt.hashSync(userinfo.password, 10)
     //注册用户
-    const sql = `insert into ${userTable} set ?`
-    db.query(sql, { name: userinfo.name, password: userinfo.password }, function (err, results) {
+    const hashPassword = bcrypt.hashSync(password, 10)
+    const sql = `insert into ${userSqlTable} set ?`
+    db.query(sql, { name, password:hashPassword }, function (err, results) {
       // 执行 SQL 语句失败
       if (err) return res.esend(err)
 
@@ -42,7 +43,7 @@ exports.regUser = (req, res) => {
       })
       res.ssend({
         token: 'Bearer ' + tokenStr,
-        name: userinfo.name,
+        name,
         id: results.insertId,
       })
     })
