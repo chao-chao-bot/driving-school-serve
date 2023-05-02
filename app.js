@@ -5,6 +5,7 @@ const cors = require('cors')
 const config = require('./config')
 const {
   userRouter,
+  menuRouter
 } = require('./routes')
 
 // 解析 token 的中间件
@@ -16,16 +17,16 @@ app.use(cors())
 
 app.use((req, res, next) => {
   // 0表示失败 1表示成功
-  res.esend = function (err, status = 0) {
+  res.esend = function (err, code = 0) {
     res.send({
-      status,
-      message: err instanceof Error ? err.message : err
+      code,
+      msg: err instanceof Error ? err.msg : err
     })
   }
-  res.ssend = function (data, status = 1) {
+  res.ssend = function (data, code = 200) {
     res.send({
-      status,
-      message: 'success',
+      code,
+      msg: 'success',
       data: data || {}
     })
   }
@@ -44,6 +45,8 @@ app.use(function (err, req, res, next) {
 }) 
 
 app.use('/api/driving', userRouter)
+app.use('/api/driving', menuRouter)
+
 
 server.listen(3000, function () {
   console.log('api server running at http://127.0.0.1:3000')
