@@ -7,7 +7,8 @@ const {
   userRouter,
   menuRouter,
   studentRouter,
-  coachHandler
+  coachHandler,
+  courseHandler
 } = require('./routes')
 
 // 解析 token 的中间件
@@ -50,6 +51,7 @@ app.use('/api/driving', userRouter)
 app.use('/api/driving', menuRouter)
 app.use('/api/driving', studentRouter)  
 app.use('/api/driving', coachHandler)  
+app.use('/api/driving', courseHandler)  
 
 server.listen(3000, function () {
   console.log('api server running at http://127.0.0.1:3000')
