@@ -4,11 +4,13 @@ const studentRouter = require('./student')
 const coachHandler  = require('./coach') 
 const courseHandler = require('./course')
 const examHandler = require('./exam')
+const recordHandler = require('./record')
 module.exports = {
   userRouter,
   menuRouter,
   studentRouter,
   coachHandler,
   courseHandler,
-  examHandler
+  examHandler,
+  recordHandler
 }

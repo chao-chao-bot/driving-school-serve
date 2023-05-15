@@ -3,7 +3,7 @@ const { connectToDatabase } = require('../db/index')
 exports.getCoachList = async (req, res) => {
   const db = await connectToDatabase()
   let { name } = req.query
-  let sql = `select * from Coach `
+  let sql = `select * from coach `
   if (name) {
     sql += `where name like "%${name}%" `
   }
@@ -23,22 +23,31 @@ exports.editCoach = async (req, res) => {
   await db.end();
 }
 //教练信息删除
-exports.deleteCoach  = async (req,res) => {
+exports.deleteCoach = async (req, res) => {
   const db = await connectToDatabase()
-  const {coach_id} = req.body
+  const { coach_id } = req.body
   const sql = `delete from coach where coach_id = ${coach_id}`
   const [rows] = await db.query(sql)
   console.log(rows);
   res.ssend([])
   await db.end()
- }
+}
 //增加学生信息
-exports.addCoach  = async (req,res) => {
+exports.addCoach = async (req, res) => {
   const db = await connectToDatabase()
   const Coach = req.body
   const sql = `insert into Coach set ?`
-  const [rows] = await db.query(sql,[Coach])
+  const [rows] = await db.query(sql, [Coach])
   console.log(rows);
   res.ssend([])
   await db.end()
- }
+}
+
+//获取教练数目
+exports.getCoachSum = async (req, res) => { 
+  const db = await connectToDatabase()
+  const sql = `select count(*) as sum from student;`
+  const [rows] = await db.query(sql)
+  res.ssend(rows[0])
+  await db.end()
+}
